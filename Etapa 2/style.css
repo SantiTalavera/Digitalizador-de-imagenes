@@ -1,0 +1,95 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #f8f8f8;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.preview-area {
+  flex: 1;
+  height: 200px;
+  border: 2px dashed #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-area {
+  padding: 12px 24px;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.sliders {
+  flex: 1;
+}
+
+.slider-group {
+  margin-bottom: 20px;
+}
+
+.slider-group label {
+  display: block;
+  font-size: 0.95em;
+  margin-bottom: 4px;
+}
+
+.slider-group strong {
+  font-weight: bold;
+  margin-left: 6px;
+}
+
+.canvas-section {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+}
+
+.canvas-section div {
+  text-align: center;
+}
+
+canvas {
+  border: 1px dashed #aaa;
+  width: 300px;
+  height: auto;
+}
+
+.download-button {
+  display: block;
+  margin: 0 auto;
+  padding: 12px 30px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
