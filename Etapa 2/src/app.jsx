@@ -1,5 +1,8 @@
+// src/App.jsx
 import React, { useState, useRef, useEffect } from "react";
-import { sampleAndQuantize } from "./imageProcessor.js";
+import "../style.css";
+import logo from "../logo.png";
+import { sampleAndQuantize } from "./imageProcessor";
 
 export default function App() {
   const [file, setFile] = useState(null);
@@ -17,103 +20,107 @@ export default function App() {
       c.width = img.width;
       c.height = img.height;
       c.getContext("2d").drawImage(img, 0, 0);
-      process();
+      sampleAndQuantize(c, transRef.current, resolution, bitDepth);
     };
     img.src = URL.createObjectURL(file);
   }, [file]);
 
   useEffect(() => {
-    if (file) process();
-  }, [resolution, bitDepth, compression]);
+    if (file) {
+      sampleAndQuantize(origRef.current, transRef.current, resolution, bitDepth);
+    }
+  }, [resolution, bitDepth]);
 
-  function process() {
-    sampleAndQuantize(origRef.current, transRef.current, resolution, bitDepth);
-  }
-
-  function download() {
+  const handleDownload = () => {
     const url = transRef.current.toDataURL("image/jpeg", compression);
     const a = document.createElement("a");
     a.href = url;
     a.download = "digitalizada.jpg";
     a.click();
-  }
+  };
 
   return (
     <div className="container">
-      <h1 className="title">Digitalizador de Imágenes</h1>
+      <header className="app-header">
+        <img src={logo} alt="Logo" className="header-logo" />
+        <h1>Digitalizador de Imágenes</h1>
+      </header>
 
-      <div className="top-section">
-        <div className="preview-area">
-          <label className="upload-area">
-            Cargar Imagen ⬆️
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => setFile(e.target.files[0])}
-            />
-          </label>
+      <div className="main">
+        <div className="top-section">
+          <div className="preview-area">
+            <label className="upload-area">
+              Cargar Imagen ⬆️
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+            </label>
+          </div>
+          <div className="sliders">
+            <div className="slider-group">
+              <label>
+                Resolución: <strong>{resolution}×{resolution}</strong>
+              </label>
+              <input
+                type="range"
+                min="100"
+                max="1000"
+                step="100"
+                value={resolution}
+                onChange={(e) => setResolution(+e.target.value)}
+              />
+            </div>
+            <div className="slider-group">
+              <label>
+                Profundidad de bits: <strong>{bitDepth}</strong>
+              </label>
+              <input
+                type="range"
+                min="1"
+                max="24"
+                step="1"
+                value={bitDepth}
+                onChange={(e) => setBitDepth(+e.target.value)}
+              />
+            </div>
+            <div className="slider-group">
+              <label>
+                Compresión: <strong>{Math.round(compression * 100)}%</strong>
+              </label>
+              <input
+                type="range"
+                min="0.1"
+                max="1"
+                step="0.1"
+                value={compression}
+                onChange={(e) => setCompression(+e.target.value)}
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="sliders">
-          <div className="slider-group">
-            <label>
-              Resolución: <strong>{resolution}×{resolution}</strong>
-            </label>
-            <input
-              type="range"
-              min="100"
-              max="1000"
-              step="100"
-              value={resolution}
-              onChange={(e) => setResolution(+e.target.value)}
-            />
+        <div className="canvas-section">
+          <div className="canvas-container">
+            <canvas ref={origRef}></canvas>
+            <p>Original</p>
           </div>
-
-          <div className="slider-group">
-            <label>
-              Profundidad de bits: <strong>{bitDepth}</strong>
-            </label>
-            <input
-              type="range"
-              min="1"
-              max="24"
-              step="1"
-              value={bitDepth}
-              onChange={(e) => setBitDepth(+e.target.value)}
-            />
-          </div>
-
-          <div className="slider-group">
-            <label>
-              Compresión: <strong>{Math.round(compression * 100)}%</strong>
-            </label>
-            <input
-              type="range"
-              min="0.1"
-              max="1"
-              step="0.1"
-              value={compression}
-              onChange={(e) => setCompression(+e.target.value)}
-            />
+          <div className="canvas-container">
+            <canvas ref={transRef}></canvas>
+            <p>Transformada</p>
           </div>
         </div>
+
+        <button className="download-button" onClick={handleDownload}>
+          Descargar Imagen
+        </button>
       </div>
 
-      <div className="canvas-section">
-        <div>
-          <canvas ref={origRef}></canvas>
-          <p>Original</p>
-        </div>
-        <div>
-          <canvas ref={transRef}></canvas>
-          <p>Transformada</p>
-        </div>
-      </div>
-
-      <button className="download-button" onClick={download}>
-        Descargar Imagen
-      </button>
+      <footer className="app-footer">
+        Integrantes: Pérez Nicolás, Egüen Agustina, Smith Justina, Talavera Santiago
+      </footer>
     </div>
-  );
+);
 }
